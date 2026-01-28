@@ -3,7 +3,7 @@ services:
   # --- MÁY 1: CHẠY AI (OLLAMA) ---
   ollama-service:
     image: ollama/ollama:latest
-    container_name: may_chay_ai
+    container_name: ollama
     volumes:
       - ollama_data:/root/.ollama # Lưu não AI lại để tắt máy không bị mất
     ports:
@@ -12,7 +12,7 @@ services:
   # --- MÁY 2: CHẠY CODE PYTHON CỦA BẠN ---
   python-app:
     build: .
-    container_name: may_chay_code
+    container_name: app
     depends_on:
       - ollama-service # Máy này phải đợi máy AI bật trước
     environment:
