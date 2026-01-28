@@ -1,0 +1,27 @@
+
+services:
+  # --- MÁY 1: CHẠY AI (OLLAMA) ---
+  ollama-service:
+    image: ollama/ollama:latest
+    container_name: may_chay_ai
+    volumes:
+      - ollama_data:/root/.ollama # Lưu não AI lại để tắt máy không bị mất
+    ports:
+      - "11434:11434"
+
+  # --- MÁY 2: CHẠY CODE PYTHON CỦA BẠN ---
+  python-app:
+    build: .
+    container_name: may_chay_code
+    depends_on:
+      - ollama-service # Máy này phải đợi máy AI bật trước
+    environment:
+      # Code Python sẽ kết nối tới máy AI qua tên "ollama-service"
+      - OLLAMA_HOST=http://ollama-service:11434
+    volumes:
+      - .:/app # Map code từ ngoài vào trong (sửa code ngoài này, trong kia nhận luôn)
+    stdin_open: true # Giữ kết nối để bạn gõ phím chat
+    tty: true
+
+volumes:
+  ollama_data:

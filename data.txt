@@ -1,0 +1,4 @@
+DeepSeek là một mô hình AI mã nguồn mở rất thông minh, có khả năng tư duy logic.
+Vì máy tính của bạn không có GPU rời, nên chúng ta sẽ dùng phiên bản DeepSeek 1.5b (bản nhỏ).
+Docker giúp đóng gói ứng dụng, sau này bạn thuê server chỉ cần copy lên là chạy ngay không lỗi.
+Hướng dẫn này được viết bởi Gemini dành riêng cho người mới bắt đầu dùng Ubuntu.
