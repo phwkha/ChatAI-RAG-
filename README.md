@@ -17,7 +17,7 @@ BƯỚC 3: Vào Chat
   ⚠️ Lưu ý quan trọng: Sau khi gõ lệnh ở Bước 3, nếu thấy màn hình đen thui hoặc đứng im, hãy BẤM PHÍM ENTER một cái. Dòng chữ 🗣️ Bạn hỏi: sẽ hiện ra ngay lập tức!
 
 
-Để sử dụng hàng ngày (bật khi cần và tắt khi xong để tiết kiệm điện/RAM), bạn chỉ cần nhớ đúng 2 bộ lệnh này thôi:
+Để sử dụng (bật khi cần và tắt khi xong để tiết kiệm điện/RAM), bạn chỉ cần nhớ đúng 2 bộ lệnh này thôi:
 
 1. KHI CẦN DÙNG (BẬT MÁY)
   Mở Terminal tại thư mục code và gõ lần lượt:
