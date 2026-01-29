@@ -7,13 +7,13 @@ BƯỚC 1: Khởi tạo và Bật máy
 BƯỚC 2: Tải "Bộ não" cho AI (BẮT BUỘC)
   Lần đầu tiên chạy, máy AI chưa có dữ liệu trí tuệ. Bạn phải chạy 2 lệnh này để tải về (chỉ cần làm 1 lần duy nhất trong đời):
     Tải model tư duy (DeepSeek):
-      docker exec -it may_chay_ai ollama pull deepseek-r1:1.5b
+      docker exec -it ollama ollama pull deepseek-r1:1.5b
     Tải model đọc hiểu văn bản (Nomic):
-      docker exec -it may_chay_ai ollama pull nomic-embed-text
+      docker exec -it ollama ollama pull nomic-embed-text
 
 BƯỚC 3: Vào Chat
   Sau khi tải xong ở bước 2, bạn chạy lệnh này để vào giao diện chat:
-    docker attach may_chay_code
+    docker attach app
   ⚠️ Lưu ý quan trọng: Sau khi gõ lệnh ở Bước 3, nếu thấy màn hình đen thui hoặc đứng im, hãy BẤM PHÍM ENTER một cái. Dòng chữ 🗣️ Bạn hỏi: sẽ hiện ra ngay lập tức!
 
 
@@ -26,7 +26,7 @@ BƯỚC 3: Vào Chat
     docker compose up -d
     
   Vào màn hình chat:
-    docker attach may_chay_code
+    docker attach app
 (Nếu thấy màn hình đen thui, nhớ bấm phím Enter một cái để đánh thức nó nhé!)
 
 2. KHI KHÔNG DÙNG (TẮT MÁY)
@@ -42,7 +42,7 @@ BƯỚC 3: Vào Chat
 TÓM TẮT CHO NHANH (Mẹo Copy-Paste)
 Lần sau bạn cứ copy dòng này dán vào là xong:
 
-Bật: docker compose up -d && docker attach may_chay_code
+Bật: docker compose up -d && docker attach app
 
 Tắt: docker compose down
 
@@ -54,7 +54,7 @@ Tắt: docker compose down
 BƯỚC 1: Tải "Bộ não" mới về máy
 Bạn cần lệnh cho máy AI tải phiên bản 8 tỷ tham số về. Mở Terminal và chạy:
 
-docker exec -it may_chay_ai ollama pull deepseek-r1:8b
+docker exec -it ollama ollama pull deepseek-r1:8b
 (Chờ tải khoảng 4.5GB).
 
 BƯỚC 2: Sửa Code để nhận não mới
@@ -73,7 +73,7 @@ YAML
 services:
   ollama-service:
     image: ollama/ollama:latest
-    container_name: may_chay_ai
+    container_name: ollama
     volumes:
       - ollama_data:/root/.ollama
     ports:
