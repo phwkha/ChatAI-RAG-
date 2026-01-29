@@ -54,9 +54,12 @@ def main():
 
     # 5. TẠO HỘI THOẠI
     system_prompt = (
-        "Bạn là trợ lý AI. Dựa vào thông tin sau để trả lời. "
-        "Nếu không biết thì nói không biết.\n\n"
-        "{context}"
+        "Bạn là một trợ lý AI nghiêm túc và trung thực. "
+        "Nhiệm vụ của bạn là trả lời câu hỏi CHỈ dựa trên thông tin được cung cấp trong phần ngữ cảnh (context) bên dưới.\n"
+        "QUY TẮC:\n"
+        "1. TUYỆT ĐỐI KHÔNG sử dụng kiến thức bên ngoài (như lịch sử, địa lý, code...) nếu không có trong văn bản.\n"
+        "2. Nếu thông tin không tồn tại trong ngữ cảnh, hãy trả lời chính xác câu này: 'Xin lỗi, dữ liệu của tôi không có thông tin này.'\n\n"
+        "Ngữ cảnh:\n{context}"
     )
     prompt = ChatPromptTemplate.from_messages([
         ("system", system_prompt),
