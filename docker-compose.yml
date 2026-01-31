@@ -18,6 +18,9 @@ services:
     environment:
       # Code Python sẽ kết nối tới máy AI qua tên "ollama-service"
       - OLLAMA_HOST=http://ollama-service:11434
+      - PYTHONIOENCODING=utf-8
+      - LANG=C.UTF-8
+      - ANONYMIZED_TELEMETRY=False
     volumes:
       - .:/app # Map code từ ngoài vào trong (sửa code ngoài này, trong kia nhận luôn)
     stdin_open: true # Giữ kết nối để bạn gõ phím chat

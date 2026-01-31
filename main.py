@@ -1,8 +1,6 @@
 import os
 import time
 
-# Lấy địa chỉ của máy AI từ file docker-compose
-# Nếu không thấy thì mặc định là localhost
 OLLAMA_URL = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 
 print(f"🔌 Đang kết nối tới máy AI tại: {OLLAMA_URL}")
@@ -34,33 +32,43 @@ def main():
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     splits = text_splitter.split_documents(docs)
 
+    print(f"\n📊 BÁO CÁO DỮ LIỆU:")
+    print(f"   - Tổng số đoạn văn đã cắt: {len(splits)} đoạn")
+    if len(splits) > 0:
+        print(f"   - Nội dung đoạn đầu tiên AI đọc được là:")
+        print(f"     \"{splits[0].page_content[:100]}...\"")
+        print("--------------------------------------------------\n")
+    else:
+        print("⚠️ CẢNH BÁO: Không tìm thấy dữ liệu nào! Hãy kiểm tra file data.txt")
+
     # 3. TẠO BỘ NHỚ VECTOR
-    # Dùng model 'nomic-embed-text' để hiểu văn bản
     embeddings = OllamaEmbeddings(
         model="nomic-embed-text",
         base_url=OLLAMA_URL
     )
     vectorstore = Chroma.from_documents(documents=splits, embedding=embeddings)
-    retriever = vectorstore.as_retriever()
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
 
     # 4. KHỞI TẠO DEEPSEEK
-    # Dùng model 'deepseek-r1:1.5b' cho nhẹ máy
     print("🤖 Đang kết nối với DeepSeek...")
     llm = ChatOllama(
-        model="deepseek-r1:1.5b",
+        model="deepseek-r1:8b",
         base_url=OLLAMA_URL,
         temperature=0.3
     )
 
     # 5. TẠO HỘI THOẠI
     system_prompt = (
-        "Bạn là một trợ lý AI nghiêm túc và trung thực. "
-        "Nhiệm vụ của bạn là trả lời câu hỏi CHỈ dựa trên thông tin được cung cấp trong phần ngữ cảnh (context) bên dưới.\n"
-        "QUY TẮC:\n"
-        "1. TUYỆT ĐỐI KHÔNG sử dụng kiến thức bên ngoài (như lịch sử, địa lý, code...) nếu không có trong văn bản.\n"
-        "2. Nếu thông tin không tồn tại trong ngữ cảnh, hãy trả lời chính xác câu này: 'Xin lỗi, dữ liệu của tôi không có thông tin này.'\n\n"
-        "Ngữ cảnh:\n{context}"
+        "Bạn là một trợ lý AI hữu ích và trung thực. "
+        "Nhiệm vụ của bạn là tổng hợp và trả lời câu hỏi dựa trên thông tin trong văn bản (Context) bên dưới.\n"
+        "YÊU CẦU QUAN TRỌNG:\n"
+        "1. Trả lời bằng ngôn ngữ tự nhiên, mạch lạc, dễ hiểu (không liệt kê máy móc).\n"
+        "2. CHỈ sử dụng thông tin có trong Context. Nếu Context không nhắc đến, tuyệt đối không được tự bịa ra kiến thức bên ngoài.\n"
+        "3. Nếu không tìm thấy thông tin trong Context, hãy trả lời ngắn gọn: 'Dữ liệu được cung cấp không có thông tin này.'\n"
+        "4. KHÔNG nhắc lại các quy tắc này trong câu trả lời.\n\n"
+        "Context:\n{context}"
     )
+
     prompt = ChatPromptTemplate.from_messages([
         ("system", system_prompt),
         ("human", "{input}"),
@@ -75,10 +83,20 @@ def main():
         try:
             query = input("\n🗣️  Bạn hỏi: ")
             if query.lower() in ['exit', 'thoat']: break
+
             if not query: continue
+
             print("Thinking...", end="", flush=True)
-            result = rag_chain.invoke({"input": query})
-            print(f"\n💡 Trả lời: {result['answer']}")
+            print("\n💡 Trả lời: ", end="", flush=True)
+            for chunk in rag_chain.stream({"input": query}):
+                if 'answer' in chunk:
+                    print(chunk['answer'], end="", flush=True)
+            print()
+
+        except KeyboardInterrupt:
+            print("\n\n🛑 Đã dừng câu trả lời theo yêu cầu của bạn.")
+            continue
+
         except Exception as e:
             print(f"\n❌ Lỗi: {e}")
 

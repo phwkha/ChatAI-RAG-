@@ -34,8 +34,6 @@ BƯỚC 3: Vào Chat
 
     Thoát ra: Gõ exit hoặc thoat rồi Enter.
 
-    Tắt hẳn (Quan trọng): Chạy lệnh này để giải phóng RAM cho máy tính:
-
       docker compose down
    (Thấy chữ "Removed" hiện ra là xong, máy bạn đã nhẹ tênh).
 
